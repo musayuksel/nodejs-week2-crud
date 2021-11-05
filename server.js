@@ -31,6 +31,22 @@ app.post("/albums", (request, response) => {
   albumsData.push(request.body); // **We need to check if the data is secure.**
   response.send(albumsData);
 });
+
+// 3.5) Delete an album#
+app.delete("/albums/:albumID", (request, response) => {
+  const albumID = request.params.albumID;
+  const albumIndex = albumsData.findIndex(
+    (album) => album.albumId === albumID
+  );
+  if (albumIndex === -1) {
+    return response
+      .status(404)
+      .send(` Album ID: ${albumID}  not found`);
+  }
+  albumsData.splice(albumIndex, 1);
+  response.status(200).send({ success: true, albumsData });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
