@@ -2,6 +2,7 @@ const { request, response } = require("express");
 const express = require("express");
 const albumsData = require("./data/albums.json");
 const app = express();
+app.use(express.json());
 const PORT = process.env.PORT || 3000;
 //3.1) Get All Albums
 app.get("/albums", (request, response) => {
@@ -22,6 +23,13 @@ app.get("/albums/:albumID", (request, response) => {
       );
   }
   response.send(filteredAlbum);
+});
+
+// 3.4) Add a New Album
+app.post("/albums", (request, response) => {
+  console.log(`request.body=>`, request.body);
+  albumsData.push(request.body); // **We need to check if the data is secure.**
+  response.send(albumsData);
 });
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
